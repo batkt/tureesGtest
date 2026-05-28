@@ -2,7 +2,11 @@
 const nextConfig = {
   output: "standalone",
 
-  turbopack: {},
+  turbopack: {
+    resolveAlias: {
+      canvas: "./lib/canvas-stub.js",
+    },
+  },
 
   // Production optimizations
   compress: true,
@@ -103,7 +107,14 @@ const nextConfig = {
       config.resolve.alias = {
         ...config.resolve.alias,
         "react-plotly.js": require.resolve("./lib/react-plotly-stub.js"),
+        canvas: false,
       };
+
+      config.externals = [
+        ...(Array.isArray(config.externals) ? config.externals : []),
+        /^canvas/,
+        /^konva/,
+      ];
     }
 
     return config;
